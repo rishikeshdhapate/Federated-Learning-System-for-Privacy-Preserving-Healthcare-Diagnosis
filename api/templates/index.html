@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FedHealth — Federated Learning Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  /* ── Variables ── */
+  :root {
+    --bg:         #050d1a;
+    --surface:    #0a1628;
+    --surface2:   #0f1f38;
+    --border:     #1a3050;
+    --accent:     #00d4ff;
+    --accent2:    #7c3aed;
+    --accent3:    #10b981;
+    --danger:     #f43f5e;
+    --warn:       #f59e0b;
+    --text:       #e2eaf5;
+    --muted:      #5a7a9a;
+    --font-mono:  'Space Mono', monospace;
+    --font-sans:  'DM Sans', sans-serif;
+    --glow:       0 0 20px rgba(0,212,255,0.18);
+    --glow2:      0 0 30px rgba(124,58,237,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Grid noise texture ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0,212,255,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ── Layout ── */
+  .shell { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 24px 60px; }
+
+  /* ── Header ── */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 0 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: var(--glow);
+  }
+  .logo-text { line-height: 1.1; }
+  .logo-text h1 { font-family: var(--font-mono); font-size: 18px; color: var(--accent); letter-spacing: 0.08em; }
+  .logo-text p  { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+
+  .status-badge {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--muted); letter-spacing: 0.06em;
+    transition: all 0.3s;
+  }
+  .status-badge.active { border-color: var(--accent); color: var(--accent); box-shadow: var(--glow); }
+  .status-badge .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted); transition: background 0.3s;
+  }
+  .status-badge.active .dot { background: var(--accent); animation: pulse 1.4s ease infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+
+  /* ── Metrics row ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px; margin-top: 32px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 18px;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .metric-card:hover { transform: translateY(-2px); box-shadow: var(--glow); }
+  .metric-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .metric-card:hover::after { opacity: 1; }
+  .metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--font-mono); }
+  .metric-value { font-family: var(--font-mono); font-size: 28px; color: var(--accent); margin-top: 8px; font-weight: 700; }
+  .metric-sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Main content grid ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; margin-top: 20px;
+  }
+  @media(max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 24px;
+  }
+  .panel-wide { grid-column: 1 / -1; }
+  .panel-title {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+  }
+  .panel-title .tag {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 7px; font-size: 10px; color: var(--accent);
+  }
+
+  /* ── Chart container ── */
+  .chart-wrap { position: relative; height: 220px; }
+
+  /* ── Hospital nodes ── */
+  .nodes-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  @media(max-width: 700px) { .nodes-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .node-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 10px;
+    text-align: center; position: relative;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .node-card.active { border-color: var(--accent3); box-shadow: 0 0 14px rgba(16,185,129,0.2); }
+  .node-icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .node-id   { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .node-acc  { font-family: var(--font-mono); font-size: 13px; color: var(--text); margin-top: 4px; font-weight: 700; }
+  .node-dp   { font-size: 9px; color: var(--accent3); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ── Control panel ── */
+  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 20px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 10px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; }
+  .form-group input, .form-group select {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 7px; padding: 8px 12px; color: var(--text);
+    font-family: var(--font-mono); font-size: 12px;
+    outline: none; transition: border-color 0.2s;
+    width: 110px;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+
+  .btn {
+    padding: 10px 22px; border-radius: 8px;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em;
+    font-weight: 700; border: none; cursor: pointer;
+    transition: all 0.2s; text-transform: uppercase;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #0099bb);
+    color: #000; box-shadow: var(--glow);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(0,212,255,0.35); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-outline {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Toggle ── */
+  .toggle-wrap { display: flex; align-items: center; gap: 8px; padding-bottom: 2px; }
+  .toggle-wrap label { font-size: 10px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; }
+  .toggle {
+    position: relative; width: 40px; height: 22px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 11px; cursor: pointer; transition: background 0.3s;
+  }
+  .toggle.on { background: var(--accent3); border-color: var(--accent3); }
+  .toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--muted); transition: all 0.3s;
+  }
+  .toggle.on::after { left: 21px; background: #fff; }
+
+  /* ── Predict section ── */
+  .predict-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .predict-result {
+    margin-top: 18px; padding: 16px 20px;
+    border-radius: 10px; display: none;
+    background: var(--surface2); border: 1px solid var(--border);
+  }
+  .predict-result.show { display: block; }
+  .predict-result.high { border-color: var(--danger); box-shadow: 0 0 18px rgba(244,63,94,0.2); }
+  .predict-result.low  { border-color: var(--accent3); box-shadow: 0 0 18px rgba(16,185,129,0.2); }
+  .result-label { font-size: 22px; font-family: var(--font-mono); font-weight: 700; }
+  .result-label.high { color: var(--danger); }
+  .result-label.low  { color: var(--accent3); }
+  .result-meta { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* ── Confusion matrix ── */
+  .cm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; }
+  .cm-cell {
+    padding: 14px 8px; border-radius: 8px; text-align: center;
+    font-family: var(--font-mono); font-size: 18px; font-weight: 700;
+  }
+  .cm-cell.tp { background: rgba(16,185,129,0.15); color: var(--accent3); }
+  .cm-cell.tn { background: rgba(16,185,129,0.10); color: var(--accent3); }
+  .cm-cell.fp { background: rgba(244,63,94,0.12); color: var(--danger); }
+  .cm-cell.fn { background: rgba(244,63,94,0.08); color: var(--danger); }
+  .cm-label   { font-size: 10px; color: var(--muted); font-family: var(--font-mono); margin-top: 3px; }
+
+  /* ── Log ── */
+  .log-box {
+    background: #020810; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px; height: 140px;
+    overflow-y: auto; font-family: var(--font-mono); font-size: 11px;
+    color: var(--muted); line-height: 1.7;
+  }
+  .log-box .log-entry { color: var(--accent); }
+  .log-box .log-entry span { color: var(--muted); }
+
+  /* ── Progress bar ── */
+  .progress-track {
+    width: 100%; height: 4px; background: var(--surface2);
+    border-radius: 2px; margin-top: 12px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px; width: 0%;
+    transition: width 0.6s ease;
+    box-shadow: var(--glow);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── Animations ── */
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+  .panel { animation: fadeIn 0.5s ease both; }
+  .panel:nth-child(2) { animation-delay: 0.05s; }
+  .panel:nth-child(3) { animation-delay: 0.10s; }
+  .panel:nth-child(4) { animation-delay: 0.15s; }
+  .panel:nth-child(5) { animation-delay: 0.20s; }
+  .panel:nth-child(6) { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-text">
+        <h1>FEDHEALTH</h1>
+        <p>Privacy-Preserving Federated Diagnosis System</p>
+      </div>
+    </div>
+    <div class="status-badge" id="statusBadge">
+      <div class="dot"></div>
+      <span id="statusText">IDLE</span>
+    </div>
+  </header>
+
+  <!-- Metrics Row -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Accuracy</div>
+      <div class="metric-value" id="mAccuracy">—</div>
+      <div class="metric-sub">Global model</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">AUC-ROC</div>
+      <div class="metric-value" id="mAuc">—</div>
+      <div class="metric-sub">Test set</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">F1 Score</div>
+      <div class="metric-value" id="mF1">—</div>
+      <div class="metric-sub">Harmonic mean</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Precision</div>
+      <div class="metric-value" id="mPrecision">—</div>
+      <div class="metric-sub">Positive pred.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Recall</div>
+      <div class="metric-value" id="mRecall">—</div>
+      <div class="metric-sub">Sensitivity</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Round</div>
+      <div class="metric-value" id="mRound">0</div>
+      <div class="metric-sub" id="mRoundSub">of 10</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="content-grid" style="margin-top:22px">
+
+    <!-- Accuracy curve -->
+    <div class="panel">
+      <div class="panel-title">Accuracy over Rounds <span class="tag">LIVE</span></div>
+      <div class="chart-wrap"><canvas id="accChart"></canvas></div>
+    </div>
+
+    <!-- Loss curve -->
+    <div class="panel">
+      <div class="panel-title">Loss over Rounds <span class="tag">LIVE</span></div>
+      <div class="chart-wrap"><canvas id="lossChart"></canvas></div>
+    </div>
+
+    <!-- Hospital nodes -->
+    <div class="panel panel-wide">
+      <div class="panel-title">Hospital Nodes <span class="tag">5 CLIENTS</span></div>
+      <div class="nodes-grid" id="nodesGrid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- Training controls -->
+    <div class="panel">
+      <div class="panel-title">Training Controls</div>
+      <div class="controls">
+        <div class="form-group">
+          <label>Rounds</label>
+          <input type="number" id="cfgRounds" value="10" min="1" max="50"/>
+        </div>
+        <div class="form-group">
+          <label>Local Epochs</label>
+          <input type="number" id="cfgEpochs" value="5" min="1" max="20"/>
+        </div>
+        <div class="toggle-wrap">
+          <label>Diff. Privacy</label>
+          <div class="toggle on" id="dpToggle" onclick="toggleDP()"></div>
+        </div>
+        <button class="btn btn-primary" id="trainBtn" onclick="startTraining()">▶ Start Training</button>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
+      <div class="log-box" id="logBox" style="margin-top:14px">
+        <div class="log-entry">[SYSTEM] <span>Dashboard initialised. Click Start Training to begin.</span></div>
+      </div>
+    </div>
+
+    <!-- Confusion matrix -->
+    <div class="panel">
+      <div class="panel-title">Confusion Matrix <span class="tag">GLOBAL MODEL</span></div>
+      <div style="font-size:11px; color:var(--muted); font-family:var(--font-mono); margin-bottom:4px">Predicted →</div>
+      <div class="cm-grid">
+        <div class="cm-cell tp" id="cmTp">—<div class="cm-label">True Pos</div></div>
+        <div class="cm-cell fp" id="cmFp">—<div class="cm-label">False Pos</div></div>
+        <div class="cm-cell fn" id="cmFn">—<div class="cm-label">False Neg</div></div>
+        <div class="cm-cell tn" id="cmTn">—<div class="cm-label">True Neg</div></div>
+      </div>
+      <div style="margin-top:14px; font-size:11px; color:var(--muted); font-family:var(--font-mono)">
+        ↑ Actual class
+      </div>
+    </div>
+
+    <!-- Prediction panel -->
+    <div class="panel panel-wide">
+      <div class="panel-title">Patient Risk Prediction <span class="tag">REAL-TIME</span></div>
+      <p style="font-size:12px; color:var(--muted); margin-bottom:14px">
+        Enter patient features (21 values). The global model will predict diabetes risk.
+      </p>
+      <div class="predict-grid" id="predictGrid">
+        <!-- Feature inputs generated by JS -->
+      </div>
+      <div style="margin-top:16px; display:flex; gap:10px">
+        <button class="btn btn-primary" onclick="runPrediction()">🔍 Predict Risk</button>
+        <button class="btn btn-outline" onclick="fillRandom()">⚡ Random Sample</button>
+        <button class="btn btn-outline" onclick="fillHighRisk()">⚠️ High-Risk Profile</button>
+      </div>
+      <div class="predict-result" id="predictResult">
+        <div class="result-label" id="resultLabel"></div>
+        <div class="result-meta" id="resultMeta"></div>
+      </div>
+    </div>
+
+  </div><!-- /content-grid -->
+</div><!-- /shell -->
+
+<script>
+// ── Config ───────────────────────────────────────────────────────────────────
+const API =
+  location.hostname === "localhost"
+    ? "http://127.0.0.1:5000"
+    : "";
+let dpEnabled = true;
+let pollTimer = null;
+
+// ── Feature definitions ──────────────────────────────────────────────────────
+const FEATURES = [
+  {name:"HighBP",      min:0, max:1,  label:"High BP"},
+  {name:"HighChol",    min:0, max:1,  label:"High Chol"},
+  {name:"CholCheck",   min:0, max:1,  label:"Chol Check"},
+  {name:"BMI",         min:10,max:70, label:"BMI"},
+  {name:"Smoker",      min:0, max:1,  label:"Smoker"},
+  {name:"Stroke",      min:0, max:1,  label:"Stroke"},
+  {name:"HeartAttack", min:0, max:1,  label:"Heart Attack"},
+  {name:"PhysActivity",min:0, max:1,  label:"Phys Activity"},
+  {name:"HvyAlcohol",  min:0, max:1,  label:"Heavy Alcohol"},
+  {name:"Healthcare",  min:0, max:1,  label:"Any Healthcare"},
+  {name:"GenHlth",     min:1, max:5,  label:"Gen Health"},
+  {name:"MentHlth",    min:0, max:30, label:"Mental Hlth"},
+  {name:"DiffWalk",    min:0, max:1,  label:"Diff Walking"},
+  {name:"Sex",         min:0, max:1,  label:"Sex (0F/1M)"},
+  {name:"Age",         min:1, max:13, label:"Age Group"},
+];
+
+// ── Build predict inputs ──────────────────────────────────────────────────────
+const pg = document.getElementById('predictGrid');
+FEATURES.forEach(f => {
+  const g = document.createElement('div');
+  g.className = 'form-group';
+  g.innerHTML = `<label>${f.label}</label>
+    <input type="number" id="feat_${f.name}" value="${Math.round((f.min+f.max)/2)}" min="${f.min}" max="${f.max}" step="${f.max<=1?1:1}"/>`;
+  pg.appendChild(g);
+});
+
+// ── Build hospital nodes ──────────────────────────────────────────────────────
+const ng = document.getElementById('nodesGrid');
+for (let i = 1; i <= 5; i++) {
+  const card = document.createElement('div');
+  card.className = 'node-card';
+  card.id = `node${i}`;
+  card.innerHTML = `<span class="node-icon">🏥</span>
+    <div class="node-id">HOSPITAL ${i}</div>
+    <div class="node-acc" id="nodeAcc${i}">—</div>
+    <div class="node-dp" id="nodeDP${i}">🔒 DP ON</div>`;
+  ng.appendChild(card);
+}
+
+// ── Chart setup ───────────────────────────────────────────────────────────────
+const chartOpts = (label, color) => ({
+  type: 'line',
+  data: { labels: [], datasets: [{
+    label, data: [],
+    borderColor: color, backgroundColor: color + '18',
+    borderWidth: 2, pointRadius: 4,
+    pointBackgroundColor: color,
+    fill: true, tension: 0.4,
+  }]},
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#1a3050' }, ticks: { color: '#5a7a9a', font: { family: 'Space Mono', size: 10 } } },
+      y: { grid: { color: '#1a3050' }, ticks: { color: '#5a7a9a', font: { family: 'Space Mono', size: 10 } }, min: 0, max: 1 },
+    }
+  }
+});
+
+const accChart  = new Chart(document.getElementById('accChart'),  chartOpts('Accuracy', '#00d4ff'));
+const lossChart = new Chart(document.getElementById('lossChart'), {
+  ...chartOpts('Loss', '#7c3aed'),
+  options: { ...chartOpts('Loss','#7c3aed').options,
+    scales: { ...chartOpts('Loss','#7c3aed').options.scales, y: { grid:{color:'#1a3050'}, ticks:{color:'#5a7a9a', font:{family:'Space Mono',size:10}} } }
+  }
+});
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+function log(msg, type='info') {
+  const box = document.getElementById('logBox');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  const ts = new Date().toLocaleTimeString();
+  const color = type==='success' ? '#10b981' : type==='error' ? '#f43f5e' : '#00d4ff';
+  entry.innerHTML = `<span style="color:var(--muted)">[${ts}]</span> <span style="color:${color}">${msg}</span>`;
+  box.appendChild(entry);
+  box.scrollTop = box.scrollHeight;
+}
+
+function fmt(v) {
+  if (v === null || v === undefined || v === '—') return '—';
+  if (typeof v === 'number') return (v * (v < 1.01 ? 100 : 1)).toFixed(v < 1.01 ? 1 : 0) + (v < 1.01 ? '%' : '');
+  return v;
+}
+
+function setMetric(id, val, pct=true) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = (val === null || val === undefined) ? '—' : (pct ? (val*100).toFixed(1)+'%' : val);
+}
+
+function updateBadge(active, text) {
+  const badge = document.getElementById('statusBadge');
+  const label = document.getElementById('statusText');
+  badge.className = 'status-badge' + (active ? ' active' : '');
+  label.textContent = text;
+}
+
+// ── Poll server status ────────────────────────────────────────────────────────
+async function pollStatus() {
+  try {
+    const res = await fetch(`${API}/status`);
+    if (!res.ok) return;
+    const d = await res.json();
+
+    updateBadge(d.is_training, d.is_training ? 'TRAINING' : (d.current_round > 0 ? 'COMPLETE' : 'IDLE'));
+    document.getElementById('trainBtn').disabled = d.is_training;
+
+    const lm = d.last_metrics || {};
+    setMetric('mAccuracy',  lm.accuracy);
+    setMetric('mAuc',       lm.auc);
+    setMetric('mF1',        lm.f1);
+    setMetric('mPrecision', lm.precision);
+    setMetric('mRecall',    lm.recall);
+    document.getElementById('mRound').textContent = d.current_round;
+    document.getElementById('mRoundSub').textContent = `of ${d.total_rounds}`;
+
+    // Progress bar
+    const pct = d.total_rounds > 0 ? (d.current_round / d.total_rounds * 100) : 0;
+    document.getElementById('progressBar').style.width = pct + '%';
+
+    // Confusion matrix
+    const cm = lm.confusion_matrix;
+    if (cm && cm.length === 2) {
+      document.getElementById('cmTp').childNodes[0].textContent = cm[1][1];
+      document.getElementById('cmFp').childNodes[0].textContent = cm[0][1];
+      document.getElementById('cmFn').childNodes[0].textContent = cm[1][0];
+      document.getElementById('cmTn').childNodes[0].textContent = cm[0][0];
+    }
+
+    // Charts
+    const hist = d.history_summary || [];
+    if (hist.length > 0) {
+      accChart.data.labels  = hist.map(h => `R${h.round}`);
+      accChart.data.datasets[0].data = hist.map(h => h.accuracy);
+      accChart.update('none');
+
+      lossChart.data.labels = hist.map(h => `R${h.round}`);
+      lossChart.data.datasets[0].data = hist.map(h => h.loss);
+      lossChart.update('none');
+    }
+
+    // Hospital nodes — fetch detailed metrics if we have history
+    if (d.current_round > 0) {
+      fetchClientMetrics();
+    }
+
+    if (!d.is_training) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+      if (d.current_round >= d.total_rounds && d.total_rounds > 0) {
+        log(`Training complete — final accuracy ${(lm.accuracy*100).toFixed(1)}%`, 'success');
+      }
+    }
+  } catch(e) {
+    // API not reachable
+  }
+}
+
+async function fetchClientMetrics() {
+  try {
+    const res = await fetch(`${API}/metrics`);
+    if (!res.ok) return;
+    const d = await res.json();
+    const clients = d.client_metrics || [];
+    clients.forEach(cm => {
+      const id = cm.hospital_id;
+      const el = document.getElementById(`nodeAcc${id}`);
+      const dp = document.getElementById(`nodeDP${id}`);
+      const card = document.getElementById(`node${id}`);
+      if (el) el.textContent = cm.accuracy ? (cm.accuracy*100).toFixed(1)+'%' : '—';
+      if (dp) dp.textContent = cm.dp_enabled ? '🔒 DP ON' : '🔓 DP OFF';
+      if (card) card.classList.add('active');
+    });
+  } catch(e) {}
+}
+
+// ── Actions ──────────────────────────────────────────────────────────────────
+function toggleDP() {
+  dpEnabled = !dpEnabled;
+  const t = document.getElementById('dpToggle');
+  t.className = 'toggle' + (dpEnabled ? ' on' : '');
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById(`nodeDP${i}`);
+    if (el) el.textContent = dpEnabled ? '🔒 DP ON' : '🔓 DP OFF';
+  }
+}
+
+async function startTraining() {
+  const rounds = parseInt(document.getElementById('cfgRounds').value) || 10;
+  const epochs = parseInt(document.getElementById('cfgEpochs').value) || 5;
+
+  log(`Starting federated training — ${rounds} rounds, ${epochs} local epochs, DP=${dpEnabled}`);
+  document.getElementById('trainBtn').disabled = true;
+  updateBadge(true, 'TRAINING');
+
+  try {
+    const res = await fetch(`${API}/train`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ n_rounds: rounds, local_epochs: epochs, dp_enabled: dpEnabled })
+    });
+    const d = await res.json();
+
+    // 409 = already training (still valid — start polling)
+    if (res.status === 409) {
+      log('Training already in progress — attaching to current session.', 'warn');
+    } else if (!res.ok) {
+      log(`Error: ${d.error || 'Unknown error'}`, 'error');
+      document.getElementById('trainBtn').disabled = false;
+      updateBadge(false, 'ERROR');
+      return;
+    } else {
+      // 202 Accepted — training running in background
+      const hospitals = d.n_hospitals || '?';
+      log(`Training launched — ${hospitals} hospitals collaborating. Polling for updates…`, 'success');
+    }
+
+    // Start polling /status every 2.5 s
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(pollStatus, 2500);
+
+  } catch(e) {
+    log(`Network error contacting API: ${e.message}`, 'error');
+    document.getElementById('trainBtn').disabled = false;
+    updateBadge(false, 'ERROR');
+  }
+}
+
+async function runPrediction() {
+  const feats = FEATURES.map(f => parseFloat(document.getElementById(`feat_${f.name}`).value) || 0);
+  try {
+    const res = await fetch(`${API}/predict`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ features: feats })
+    });
+    const d = await res.json();
+    if (!res.ok) { log(`Prediction error: ${d.error}`, 'error'); return; }
+
+    const panel = document.getElementById('predictResult');
+    const label = document.getElementById('resultLabel');
+    const meta  = document.getElementById('resultMeta');
+
+    panel.className = 'predict-result show ' + (d.prediction === 1 ? 'high' : 'low');
+    label.className = 'result-label ' + (d.prediction === 1 ? 'high' : 'low');
+    label.textContent = d.label;
+    meta.textContent  = `Probability: ${(d.probability * 100).toFixed(1)}%  ·  Confidence: ${d.confidence}%`;
+    log(`Prediction: ${d.label} (p=${(d.probability*100).toFixed(1)}%)`, d.prediction===1 ? 'error' : 'success');
+  } catch(e) {
+    log('Cannot reach API for prediction', 'error');
+  }
+}
+
+function fillRandom() {
+  FEATURES.forEach(f => {
+    const el = document.getElementById(`feat_${f.name}`);
+    if (el) el.value = Math.round(f.min + Math.random() * (f.max - f.min));
+  });
+}
+
+function fillHighRisk() {
+  const highRisk = {
+    HighBP:1, HighChol:1, CholCheck:1, BMI:38, Smoker:1,
+    Stroke:1, HeartAttack:1, PhysActivity:0,
+    HvyAlcohol:0, Healthcare:1, GenHlth:5,
+    MentHlth:15, DiffWalk:1, Sex:1, Age:11
+  };
+  Object.entries(highRisk).forEach(([name, val]) => {
+    const el = document.getElementById(`feat_${name}`);
+    if (el) el.value = val;
+  });
+  log('High-risk patient profile loaded', 'info');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+pollStatus();
+// Check status every 5s at startup (slower when idle)
+setInterval(() => { if (!pollTimer) pollStatus(); }, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Core ML
+torch
+torchvision
+numpy
+scikit-learn
+pandas
+
+# API
+flask
+flask-cors
+gunicorn
+
+# Data download
+requests
+urllib3
+
+# Plotting
+matplotlib
+
+# Utilities
+tqdm

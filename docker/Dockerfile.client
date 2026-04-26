@@ -1,0 +1,46 @@
+# docker/Dockerfile.client
+# ─────────────────────────────────────────────────────────────────────────────
+# One client container = one simulated hospital node.
+# The HOSPITAL_ID env var selects which data split to use.
+# In a real deployment each hospital would run this container on their own
+# infrastructure, and only send weight updates over the network.
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM python:3.10-slim
+
+LABEL description="Federated Learning Hospital Client Node"
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Default environment variables (override in docker-compose)
+ENV HOSPITAL_ID=1
+ENV SERVER_URL=http://server:5000
+ENV LOCAL_EPOCHS=5
+ENV DP_ENABLED=true
+ENV DP_NOISE_MULT=0.5
+ENV DP_MAX_NORM=1.0
+
+# Expose nothing (client pushes to server, not the other way around)
+# In a real deployment the client would use a secure gRPC channel
+
+CMD ["python", "-c", "\
+import os, sys, pickle, torch; \
+sys.path.insert(0, '.'); \
+from client.local_trainer import HospitalClient; \
+hid = int(os.getenv('HOSPITAL_ID', 1)); \
+client = HospitalClient(\
+    hospital_id=hid, \
+    data_path=f'data/processed/hospital_{hid}.pkl', \
+    dp_enabled=os.getenv('DP_ENABLED','true').lower()=='true', \
+    local_epochs=int(os.getenv('LOCAL_EPOCHS', 5)), \
+); \
+print(f'Hospital {hid} client ready — waiting for server coordination'); \
+"]

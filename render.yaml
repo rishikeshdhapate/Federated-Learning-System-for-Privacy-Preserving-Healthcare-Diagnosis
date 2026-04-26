@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: federated-healthcare
+    runtime: python
+    buildCommand: "chmod +x build.sh && ./build.sh"
+    startCommand: "gunicorn api.app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120"
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.10.13"
+      - key: N_HOSPITALS
+        value: "5"
+      - key: N_ROUNDS
+        value: "10"
+      - key: LOCAL_EPOCHS
+        value: "5"
+      - key: LR
+        value: "0.001"
+      - key: DP_ENABLED
+        value: "true"
+      - key: DEVICE
+        value: "cpu"
+      - key: PROCESSED_DIR
+        value: "data/processed"
+      - key: OUTPUT_DIR
+        value: "outputs"

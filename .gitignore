@@ -1,0 +1,14 @@
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Ignore raw data but keep data/processed/ (generated at build)
+data/raw/
+data/*.csv
+
+# Ignore model checkpoints and large outputs
+outputs/
+*.pt
+*.pth
+*.h5
