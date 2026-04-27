@@ -528,6 +528,12 @@ async function pollStatus() {
     updateBadge(d.is_training, d.is_training ? 'TRAINING' : (d.current_round > 0 ? 'COMPLETE' : 'IDLE'));
     document.getElementById('trainBtn').disabled = d.is_training;
 
+    // Show server-side errors in the log
+    if (d.status_message && d.status_message.startsWith('Error:') || 
+        d.status_message && d.status_message.startsWith('Training failed:')) {
+      log(`Server: ${d.status_message}`, 'error');
+    }
+
     const lm = d.last_metrics || {};
     setMetric('mAccuracy',  lm.accuracy);
     setMetric('mAuc',       lm.auc);
@@ -572,6 +578,15 @@ async function pollStatus() {
       pollTimer = null;
       if (d.current_round >= d.total_rounds && d.total_rounds > 0) {
         log(`Training complete — final accuracy ${(lm.accuracy*100).toFixed(1)}%`, 'success');
+        updateBadge(false, 'COMPLETE');
+      } else if (d.current_round > 0) {
+        // Training stopped before finishing all rounds — likely an error
+        log(`Training stopped at round ${d.current_round}/${d.total_rounds}. Check server logs for errors.`, 'error');
+        updateBadge(false, 'ERROR');
+        document.getElementById('trainBtn').disabled = false;
+      } else {
+        updateBadge(false, 'IDLE');
+        document.getElementById('trainBtn').disabled = false;
       }
     }
   } catch(e) {
