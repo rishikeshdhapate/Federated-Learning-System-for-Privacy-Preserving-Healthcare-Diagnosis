@@ -283,12 +283,21 @@ class FederatedServer:
 
     def run_all_rounds(self) -> dict:
         """Run the full n_rounds federated training process."""
-        self.is_training  = True
+        # NOTE: is_training is already set to True by the API before calling this.
+        # We do NOT reset it here to avoid race conditions.
         self.status_message = "Training started"
         t_total = time.time()
 
-        for _ in range(self.n_rounds):
-            self.run_round()
+        try:
+            for _ in range(self.n_rounds):
+                self.run_round()
+        except BaseException as exc:
+            # Catch ALL exceptions (including MemoryError, SystemExit, etc.)
+            # so is_training is always cleared and the status reflects the error.
+            self.is_training = False
+            self.status_message = f"Training failed: {exc}"
+            print(f"[Server] Training aborted: {exc}")
+            raise  # re-raise so the caller (_train_bg) also sees it
 
         self.is_training = False
         total_time = round(time.time() - t_total, 2)
@@ -366,3 +375,4 @@ class FederatedServer:
             "label":        "High Risk" if pred == 1 else "Low Risk",
             "confidence":   round(abs(prob - 0.5) * 200, 1),  # 0-100
         }
+
