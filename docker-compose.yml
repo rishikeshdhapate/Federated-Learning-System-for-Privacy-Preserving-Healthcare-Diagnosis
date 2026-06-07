@@ -1,0 +1,164 @@
+# docker-compose.yml
+# ─────────────────────────────────────────────────────────────────────────────
+# Orchestrates the full Federated Healthcare Learning System:
+#
+#   server     → Flask API + FederatedServer (port 5000)
+#   dashboard  → nginx serving the HTML dashboard (port 8080)
+#   hospital_1 … hospital_5 → simulated client nodes
+#
+# Usage:
+#   docker-compose up --build
+#   Open http://localhost:8080 in your browser
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+
+  # ── Central Federated Server + API ──────────────────────────────────────────
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    container_name: fedhealth-server
+    ports:
+      - "5000:5000"
+    environment:
+      - N_HOSPITALS=5
+      - N_ROUNDS=10
+      - LOCAL_EPOCHS=5
+      - LR=0.001
+      - DP_ENABLED=true
+      - DP_NOISE_MULT=0.5
+      - DP_MAX_NORM=1.0
+      - DEVICE=cpu
+      - PROCESSED_DIR=data/processed
+      - OUTPUT_DIR=outputs
+    volumes:
+      - ./outputs:/app/outputs       # persist trained model
+      - ./data:/app/data             # persist dataset
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+    networks:
+      - fednet
+
+  # ── Dashboard ────────────────────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dashboard
+    container_name: fedhealth-dashboard
+    ports:
+      - "8080:80"
+    depends_on:
+      server:
+        condition: service_healthy
+    networks:
+      - fednet
+    restart: unless-stopped
+
+  # ── Hospital Client Nodes ────────────────────────────────────────────────────
+  # Each runs on its own isolated data silo.
+  # In this simulation they are coordinated by the server in-process;
+  # in a real deployment each would be an independent network endpoint.
+
+  hospital_1:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: fedhealth-hospital-1
+    environment:
+      - HOSPITAL_ID=1
+      - SERVER_URL=http://server:5000
+      - DP_ENABLED=true
+      - LOCAL_EPOCHS=5
+    depends_on:
+      - server
+    volumes:
+      - ./data/processed:/app/data/processed:ro   # read-only data mount
+    networks:
+      - fednet
+    restart: "no"
+
+  hospital_2:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: fedhealth-hospital-2
+    environment:
+      - HOSPITAL_ID=2
+      - SERVER_URL=http://server:5000
+      - DP_ENABLED=true
+      - LOCAL_EPOCHS=5
+    depends_on:
+      - server
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+    networks:
+      - fednet
+    restart: "no"
+
+  hospital_3:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: fedhealth-hospital-3
+    environment:
+      - HOSPITAL_ID=3
+      - SERVER_URL=http://server:5000
+      - DP_ENABLED=true
+      - LOCAL_EPOCHS=5
+    depends_on:
+      - server
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+    networks:
+      - fednet
+    restart: "no"
+
+  hospital_4:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: fedhealth-hospital-4
+    environment:
+      - HOSPITAL_ID=4
+      - SERVER_URL=http://server:5000
+      - DP_ENABLED=true
+      - LOCAL_EPOCHS=5
+    depends_on:
+      - server
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+    networks:
+      - fednet
+    restart: "no"
+
+  hospital_5:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: fedhealth-hospital-5
+    environment:
+      - HOSPITAL_ID=5
+      - SERVER_URL=http://server:5000
+      - DP_ENABLED=true
+      - LOCAL_EPOCHS=5
+    depends_on:
+      - server
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+    networks:
+      - fednet
+    restart: "no"
+
+# ── Shared network ─────────────────────────────────────────────────────────────
+networks:
+  fednet:
+    driver: bridge
+    name: federated-health-network

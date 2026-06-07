@@ -1,0 +1,1562 @@
+[
+  {
+    "round": 1,
+    "global_metrics": {
+      "accuracy": 0.7508,
+      "precision": 0.693,
+      "recall": 0.3042,
+      "f1": 0.4228,
+      "auc": 0.8125,
+      "loss": 0.515422,
+      "confusion_matrix": [
+        [
+          1583,
+          97
+        ],
+        [
+          501,
+          219
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.7729,
+      "precision": 0.7275,
+      "recall": 0.3421,
+      "f1": 0.4631,
+      "auc": 0.8077,
+      "loss": 0.503,
+      "train_loss": 0.5937,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1292,
+          73
+        ],
+        [
+          363,
+          192
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.7812,
+        "precision": 0.7612,
+        "recall": 0.4286,
+        "f1": 0.5484,
+        "auc": 0.8197,
+        "loss": 0.514094,
+        "confusion_matrix": [
+          [
+            249,
+            16
+          ],
+          [
+            68,
+            51
+          ]
+        ],
+        "train_loss": 0.607834,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8099,
+        "precision": 0.8286,
+        "recall": 0.3021,
+        "f1": 0.4427,
+        "auc": 0.8222,
+        "loss": 0.472135,
+        "confusion_matrix": [
+          [
+            282,
+            6
+          ],
+          [
+            67,
+            29
+          ]
+        ],
+        "train_loss": 0.588011,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7656,
+        "precision": 0.6364,
+        "recall": 0.2745,
+        "f1": 0.3836,
+        "auc": 0.785,
+        "loss": 0.500585,
+        "confusion_matrix": [
+          [
+            266,
+            16
+          ],
+          [
+            74,
+            28
+          ]
+        ],
+        "train_loss": 0.587133,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7474,
+        "precision": 0.7097,
+        "recall": 0.3577,
+        "f1": 0.4757,
+        "auc": 0.8328,
+        "loss": 0.502586,
+        "confusion_matrix": [
+          [
+            243,
+            18
+          ],
+          [
+            79,
+            44
+          ]
+        ],
+        "train_loss": 0.593641,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7604,
+        "precision": 0.7018,
+        "recall": 0.3478,
+        "f1": 0.4651,
+        "auc": 0.779,
+        "loss": 0.525407,
+        "confusion_matrix": [
+          [
+            252,
+            17
+          ],
+          [
+            75,
+            40
+          ]
+        ],
+        "train_loss": 0.591961,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 14.36
+  },
+  {
+    "round": 2,
+    "global_metrics": {
+      "accuracy": 0.7942,
+      "precision": 0.6728,
+      "recall": 0.6111,
+      "f1": 0.6405,
+      "auc": 0.8528,
+      "loss": 0.436231,
+      "confusion_matrix": [
+        [
+          1466,
+          214
+        ],
+        [
+          280,
+          440
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8068,
+      "precision": 0.6792,
+      "recall": 0.6199,
+      "f1": 0.6475,
+      "auc": 0.8522,
+      "loss": 0.4279,
+      "train_loss": 0.5005,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1203,
+          162
+        ],
+        [
+          209,
+          346
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8125,
+        "precision": 0.7043,
+        "recall": 0.6807,
+        "f1": 0.6923,
+        "auc": 0.8639,
+        "loss": 0.435986,
+        "confusion_matrix": [
+          [
+            231,
+            34
+          ],
+          [
+            38,
+            81
+          ]
+        ],
+        "train_loss": 0.51505,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8333,
+        "precision": 0.6905,
+        "recall": 0.6042,
+        "f1": 0.6444,
+        "auc": 0.8604,
+        "loss": 0.405308,
+        "confusion_matrix": [
+          [
+            262,
+            26
+          ],
+          [
+            38,
+            58
+          ]
+        ],
+        "train_loss": 0.481051,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8073,
+        "precision": 0.6628,
+        "recall": 0.5588,
+        "f1": 0.6064,
+        "auc": 0.85,
+        "loss": 0.418817,
+        "confusion_matrix": [
+          [
+            253,
+            29
+          ],
+          [
+            45,
+            57
+          ]
+        ],
+        "train_loss": 0.506984,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8099,
+        "precision": 0.7049,
+        "recall": 0.6992,
+        "f1": 0.702,
+        "auc": 0.8678,
+        "loss": 0.418403,
+        "confusion_matrix": [
+          [
+            225,
+            36
+          ],
+          [
+            37,
+            86
+          ]
+        ],
+        "train_loss": 0.496457,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7708,
+        "precision": 0.6337,
+        "recall": 0.5565,
+        "f1": 0.5926,
+        "auc": 0.8189,
+        "loss": 0.461043,
+        "confusion_matrix": [
+          [
+            232,
+            37
+          ],
+          [
+            51,
+            64
+          ]
+        ],
+        "train_loss": 0.503182,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 13.36
+  },
+  {
+    "round": 3,
+    "global_metrics": {
+      "accuracy": 0.7954,
+      "precision": 0.6592,
+      "recall": 0.6583,
+      "f1": 0.6588,
+      "auc": 0.8612,
+      "loss": 0.421549,
+      "confusion_matrix": [
+        [
+          1435,
+          245
+        ],
+        [
+          246,
+          474
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8036,
+      "precision": 0.655,
+      "recall": 0.6699,
+      "f1": 0.6611,
+      "auc": 0.8617,
+      "loss": 0.4128,
+      "train_loss": 0.4643,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1169,
+          196
+        ],
+        [
+          181,
+          374
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8177,
+        "precision": 0.6842,
+        "recall": 0.7647,
+        "f1": 0.7222,
+        "auc": 0.8805,
+        "loss": 0.408753,
+        "confusion_matrix": [
+          [
+            223,
+            42
+          ],
+          [
+            28,
+            91
+          ]
+        ],
+        "train_loss": 0.479435,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8281,
+        "precision": 0.6705,
+        "recall": 0.6146,
+        "f1": 0.6413,
+        "auc": 0.8683,
+        "loss": 0.392537,
+        "confusion_matrix": [
+          [
+            259,
+            29
+          ],
+          [
+            37,
+            59
+          ]
+        ],
+        "train_loss": 0.447624,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7995,
+        "precision": 0.6168,
+        "recall": 0.6471,
+        "f1": 0.6316,
+        "auc": 0.8625,
+        "loss": 0.39883,
+        "confusion_matrix": [
+          [
+            241,
+            41
+          ],
+          [
+            36,
+            66
+          ]
+        ],
+        "train_loss": 0.468813,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7943,
+        "precision": 0.6618,
+        "recall": 0.7317,
+        "f1": 0.695,
+        "auc": 0.866,
+        "loss": 0.419938,
+        "confusion_matrix": [
+          [
+            215,
+            46
+          ],
+          [
+            33,
+            90
+          ]
+        ],
+        "train_loss": 0.455883,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7786,
+        "precision": 0.6415,
+        "recall": 0.5913,
+        "f1": 0.6154,
+        "auc": 0.8313,
+        "loss": 0.443788,
+        "confusion_matrix": [
+          [
+            231,
+            38
+          ],
+          [
+            47,
+            68
+          ]
+        ],
+        "train_loss": 0.469971,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 14.01
+  },
+  {
+    "round": 4,
+    "global_metrics": {
+      "accuracy": 0.7967,
+      "precision": 0.6629,
+      "recall": 0.6556,
+      "f1": 0.6592,
+      "auc": 0.8632,
+      "loss": 0.416478,
+      "confusion_matrix": [
+        [
+          1440,
+          240
+        ],
+        [
+          248,
+          472
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8073,
+      "precision": 0.6649,
+      "recall": 0.6653,
+      "f1": 0.6648,
+      "auc": 0.866,
+      "loss": 0.4063,
+      "train_loss": 0.4506,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1180,
+          185
+        ],
+        [
+          185,
+          370
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8333,
+        "precision": 0.7236,
+        "recall": 0.7479,
+        "f1": 0.7355,
+        "auc": 0.8849,
+        "loss": 0.398453,
+        "confusion_matrix": [
+          [
+            231,
+            34
+          ],
+          [
+            30,
+            89
+          ]
+        ],
+        "train_loss": 0.46137,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8177,
+        "precision": 0.63,
+        "recall": 0.6562,
+        "f1": 0.6429,
+        "auc": 0.8717,
+        "loss": 0.390796,
+        "confusion_matrix": [
+          [
+            251,
+            37
+          ],
+          [
+            33,
+            63
+          ]
+        ],
+        "train_loss": 0.430287,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8151,
+        "precision": 0.6535,
+        "recall": 0.6471,
+        "f1": 0.6502,
+        "auc": 0.8673,
+        "loss": 0.38933,
+        "confusion_matrix": [
+          [
+            247,
+            35
+          ],
+          [
+            36,
+            66
+          ]
+        ],
+        "train_loss": 0.461572,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8099,
+        "precision": 0.7193,
+        "recall": 0.6667,
+        "f1": 0.692,
+        "auc": 0.8697,
+        "loss": 0.410823,
+        "confusion_matrix": [
+          [
+            229,
+            32
+          ],
+          [
+            41,
+            82
+          ]
+        ],
+        "train_loss": 0.442314,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7604,
+        "precision": 0.5983,
+        "recall": 0.6087,
+        "f1": 0.6034,
+        "auc": 0.8365,
+        "loss": 0.442334,
+        "confusion_matrix": [
+          [
+            222,
+            47
+          ],
+          [
+            45,
+            70
+          ]
+        ],
+        "train_loss": 0.457532,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 15.49
+  },
+  {
+    "round": 5,
+    "global_metrics": {
+      "accuracy": 0.7996,
+      "precision": 0.671,
+      "recall": 0.6514,
+      "f1": 0.661,
+      "auc": 0.8649,
+      "loss": 0.412176,
+      "confusion_matrix": [
+        [
+          1450,
+          230
+        ],
+        [
+          251,
+          469
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8141,
+      "precision": 0.679,
+      "recall": 0.6769,
+      "f1": 0.6774,
+      "auc": 0.8662,
+      "loss": 0.404,
+      "train_loss": 0.4424,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1187,
+          178
+        ],
+        [
+          179,
+          376
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8516,
+        "precision": 0.787,
+        "recall": 0.7143,
+        "f1": 0.7489,
+        "auc": 0.8848,
+        "loss": 0.391189,
+        "confusion_matrix": [
+          [
+            242,
+            23
+          ],
+          [
+            34,
+            85
+          ]
+        ],
+        "train_loss": 0.457348,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8333,
+        "precision": 0.6667,
+        "recall": 0.6667,
+        "f1": 0.6667,
+        "auc": 0.8677,
+        "loss": 0.390656,
+        "confusion_matrix": [
+          [
+            256,
+            32
+          ],
+          [
+            32,
+            64
+          ]
+        ],
+        "train_loss": 0.421823,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8177,
+        "precision": 0.6455,
+        "recall": 0.6961,
+        "f1": 0.6698,
+        "auc": 0.8737,
+        "loss": 0.385308,
+        "confusion_matrix": [
+          [
+            243,
+            39
+          ],
+          [
+            31,
+            71
+          ]
+        ],
+        "train_loss": 0.448601,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8047,
+        "precision": 0.6905,
+        "recall": 0.7073,
+        "f1": 0.6988,
+        "auc": 0.8702,
+        "loss": 0.411782,
+        "confusion_matrix": [
+          [
+            222,
+            39
+          ],
+          [
+            36,
+            87
+          ]
+        ],
+        "train_loss": 0.43552,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.763,
+        "precision": 0.6053,
+        "recall": 0.6,
+        "f1": 0.6026,
+        "auc": 0.8345,
+        "loss": 0.441007,
+        "confusion_matrix": [
+          [
+            224,
+            45
+          ],
+          [
+            46,
+            69
+          ]
+        ],
+        "train_loss": 0.448758,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 15.2
+  },
+  {
+    "round": 6,
+    "global_metrics": {
+      "accuracy": 0.7971,
+      "precision": 0.6671,
+      "recall": 0.6458,
+      "f1": 0.6563,
+      "auc": 0.8656,
+      "loss": 0.410884,
+      "confusion_matrix": [
+        [
+          1448,
+          232
+        ],
+        [
+          255,
+          465
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.814,
+      "precision": 0.6793,
+      "recall": 0.6714,
+      "f1": 0.6749,
+      "auc": 0.8661,
+      "loss": 0.4019,
+      "train_loss": 0.4363,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1189,
+          176
+        ],
+        [
+          181,
+          374
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8333,
+        "precision": 0.735,
+        "recall": 0.7227,
+        "f1": 0.7288,
+        "auc": 0.8867,
+        "loss": 0.386601,
+        "confusion_matrix": [
+          [
+            234,
+            31
+          ],
+          [
+            33,
+            86
+          ]
+        ],
+        "train_loss": 0.44717,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8385,
+        "precision": 0.6848,
+        "recall": 0.6562,
+        "f1": 0.6702,
+        "auc": 0.8712,
+        "loss": 0.385753,
+        "confusion_matrix": [
+          [
+            259,
+            29
+          ],
+          [
+            33,
+            63
+          ]
+        ],
+        "train_loss": 0.414772,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8229,
+        "precision": 0.6735,
+        "recall": 0.6471,
+        "f1": 0.66,
+        "auc": 0.8669,
+        "loss": 0.385364,
+        "confusion_matrix": [
+          [
+            250,
+            32
+          ],
+          [
+            36,
+            66
+          ]
+        ],
+        "train_loss": 0.447617,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8047,
+        "precision": 0.6791,
+        "recall": 0.7398,
+        "f1": 0.7082,
+        "auc": 0.8684,
+        "loss": 0.415681,
+        "confusion_matrix": [
+          [
+            218,
+            43
+          ],
+          [
+            32,
+            91
+          ]
+        ],
+        "train_loss": 0.426669,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7708,
+        "precision": 0.6239,
+        "recall": 0.5913,
+        "f1": 0.6071,
+        "auc": 0.8371,
+        "loss": 0.436098,
+        "confusion_matrix": [
+          [
+            228,
+            41
+          ],
+          [
+            47,
+            68
+          ]
+        ],
+        "train_loss": 0.445163,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 9.81
+  },
+  {
+    "round": 7,
+    "global_metrics": {
+      "accuracy": 0.7987,
+      "precision": 0.6735,
+      "recall": 0.6389,
+      "f1": 0.6557,
+      "auc": 0.8663,
+      "loss": 0.410202,
+      "confusion_matrix": [
+        [
+          1457,
+          223
+        ],
+        [
+          260,
+          460
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8177,
+      "precision": 0.6855,
+      "recall": 0.679,
+      "f1": 0.6819,
+      "auc": 0.8681,
+      "loss": 0.4005,
+      "train_loss": 0.4355,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1192,
+          173
+        ],
+        [
+          177,
+          378
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8438,
+        "precision": 0.7521,
+        "recall": 0.7395,
+        "f1": 0.7458,
+        "auc": 0.891,
+        "loss": 0.38451,
+        "confusion_matrix": [
+          [
+            236,
+            29
+          ],
+          [
+            31,
+            88
+          ]
+        ],
+        "train_loss": 0.451759,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8438,
+        "precision": 0.6957,
+        "recall": 0.6667,
+        "f1": 0.6809,
+        "auc": 0.8733,
+        "loss": 0.381312,
+        "confusion_matrix": [
+          [
+            260,
+            28
+          ],
+          [
+            32,
+            64
+          ]
+        ],
+        "train_loss": 0.410731,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8229,
+        "precision": 0.67,
+        "recall": 0.6569,
+        "f1": 0.6634,
+        "auc": 0.8709,
+        "loss": 0.383402,
+        "confusion_matrix": [
+          [
+            249,
+            33
+          ],
+          [
+            35,
+            67
+          ]
+        ],
+        "train_loss": 0.446583,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8021,
+        "precision": 0.6767,
+        "recall": 0.7317,
+        "f1": 0.7031,
+        "auc": 0.8673,
+        "loss": 0.417602,
+        "confusion_matrix": [
+          [
+            218,
+            43
+          ],
+          [
+            33,
+            90
+          ]
+        ],
+        "train_loss": 0.424278,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.776,
+        "precision": 0.633,
+        "recall": 0.6,
+        "f1": 0.6161,
+        "auc": 0.838,
+        "loss": 0.435432,
+        "confusion_matrix": [
+          [
+            229,
+            40
+          ],
+          [
+            46,
+            69
+          ]
+        ],
+        "train_loss": 0.443946,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 9.43
+  },
+  {
+    "round": 8,
+    "global_metrics": {
+      "accuracy": 0.8033,
+      "precision": 0.6751,
+      "recall": 0.6639,
+      "f1": 0.6695,
+      "auc": 0.8671,
+      "loss": 0.409416,
+      "confusion_matrix": [
+        [
+          1450,
+          230
+        ],
+        [
+          242,
+          478
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8151,
+      "precision": 0.6744,
+      "recall": 0.6874,
+      "f1": 0.6804,
+      "auc": 0.8682,
+      "loss": 0.4002,
+      "train_loss": 0.4309,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1182,
+          183
+        ],
+        [
+          172,
+          383
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8385,
+        "precision": 0.728,
+        "recall": 0.7647,
+        "f1": 0.7459,
+        "auc": 0.8917,
+        "loss": 0.381193,
+        "confusion_matrix": [
+          [
+            231,
+            34
+          ],
+          [
+            28,
+            91
+          ]
+        ],
+        "train_loss": 0.44452,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8359,
+        "precision": 0.6774,
+        "recall": 0.6562,
+        "f1": 0.6667,
+        "auc": 0.8709,
+        "loss": 0.384957,
+        "confusion_matrix": [
+          [
+            258,
+            30
+          ],
+          [
+            33,
+            63
+          ]
+        ],
+        "train_loss": 0.407065,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8099,
+        "precision": 0.633,
+        "recall": 0.6765,
+        "f1": 0.654,
+        "auc": 0.8722,
+        "loss": 0.384207,
+        "confusion_matrix": [
+          [
+            242,
+            40
+          ],
+          [
+            33,
+            69
+          ]
+        ],
+        "train_loss": 0.443155,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8125,
+        "precision": 0.6947,
+        "recall": 0.7398,
+        "f1": 0.7165,
+        "auc": 0.8711,
+        "loss": 0.413013,
+        "confusion_matrix": [
+          [
+            221,
+            40
+          ],
+          [
+            32,
+            91
+          ]
+        ],
+        "train_loss": 0.420177,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7786,
+        "precision": 0.6389,
+        "recall": 0.6,
+        "f1": 0.6188,
+        "auc": 0.8351,
+        "loss": 0.437656,
+        "confusion_matrix": [
+          [
+            230,
+            39
+          ],
+          [
+            46,
+            69
+          ]
+        ],
+        "train_loss": 0.439773,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 9.17
+  },
+  {
+    "round": 9,
+    "global_metrics": {
+      "accuracy": 0.8004,
+      "precision": 0.6785,
+      "recall": 0.6361,
+      "f1": 0.6566,
+      "auc": 0.8667,
+      "loss": 0.40974,
+      "confusion_matrix": [
+        [
+          1463,
+          217
+        ],
+        [
+          262,
+          458
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8208,
+      "precision": 0.6924,
+      "recall": 0.6757,
+      "f1": 0.6837,
+      "auc": 0.8684,
+      "loss": 0.3995,
+      "train_loss": 0.4306,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1200,
+          165
+        ],
+        [
+          179,
+          376
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.849,
+        "precision": 0.748,
+        "recall": 0.7731,
+        "f1": 0.7603,
+        "auc": 0.8922,
+        "loss": 0.383787,
+        "confusion_matrix": [
+          [
+            234,
+            31
+          ],
+          [
+            27,
+            92
+          ]
+        ],
+        "train_loss": 0.444623,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8385,
+        "precision": 0.6809,
+        "recall": 0.6667,
+        "f1": 0.6737,
+        "auc": 0.8736,
+        "loss": 0.382981,
+        "confusion_matrix": [
+          [
+            258,
+            30
+          ],
+          [
+            32,
+            64
+          ]
+        ],
+        "train_loss": 0.403744,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8203,
+        "precision": 0.6667,
+        "recall": 0.6471,
+        "f1": 0.6567,
+        "auc": 0.8688,
+        "loss": 0.386297,
+        "confusion_matrix": [
+          [
+            249,
+            33
+          ],
+          [
+            36,
+            66
+          ]
+        ],
+        "train_loss": 0.443919,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8073,
+        "precision": 0.7059,
+        "recall": 0.6829,
+        "f1": 0.6942,
+        "auc": 0.8716,
+        "loss": 0.408468,
+        "confusion_matrix": [
+          [
+            226,
+            35
+          ],
+          [
+            39,
+            84
+          ]
+        ],
+        "train_loss": 0.419419,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7891,
+        "precision": 0.6604,
+        "recall": 0.6087,
+        "f1": 0.6335,
+        "auc": 0.8357,
+        "loss": 0.43596,
+        "confusion_matrix": [
+          [
+            233,
+            36
+          ],
+          [
+            45,
+            70
+          ]
+        ],
+        "train_loss": 0.441074,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 12.41
+  },
+  {
+    "round": 10,
+    "global_metrics": {
+      "accuracy": 0.8025,
+      "precision": 0.6804,
+      "recall": 0.6444,
+      "f1": 0.6619,
+      "auc": 0.8666,
+      "loss": 0.409714,
+      "confusion_matrix": [
+        [
+          1462,
+          218
+        ],
+        [
+          256,
+          464
+        ]
+      ]
+    },
+    "avg_client_metrics": {
+      "accuracy": 0.8161,
+      "precision": 0.688,
+      "recall": 0.6638,
+      "f1": 0.6753,
+      "auc": 0.8682,
+      "loss": 0.4005,
+      "train_loss": 0.4277,
+      "hospital_id": 3.0,
+      "n_train": 1536.0,
+      "dp_enabled": 1.0,
+      "confusion_matrix": [
+        [
+          1199,
+          166
+        ],
+        [
+          187,
+          368
+        ]
+      ]
+    },
+    "client_metrics": [
+      {
+        "accuracy": 0.8464,
+        "precision": 0.7727,
+        "recall": 0.7143,
+        "f1": 0.7424,
+        "auc": 0.8937,
+        "loss": 0.377467,
+        "confusion_matrix": [
+          [
+            240,
+            25
+          ],
+          [
+            34,
+            85
+          ]
+        ],
+        "train_loss": 0.441258,
+        "hospital_id": 1,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8359,
+        "precision": 0.6667,
+        "recall": 0.6875,
+        "f1": 0.6769,
+        "auc": 0.8731,
+        "loss": 0.386187,
+        "confusion_matrix": [
+          [
+            255,
+            33
+          ],
+          [
+            30,
+            66
+          ]
+        ],
+        "train_loss": 0.409604,
+        "hospital_id": 2,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.8203,
+        "precision": 0.6602,
+        "recall": 0.6667,
+        "f1": 0.6634,
+        "auc": 0.8705,
+        "loss": 0.388636,
+        "confusion_matrix": [
+          [
+            247,
+            35
+          ],
+          [
+            34,
+            68
+          ]
+        ],
+        "train_loss": 0.439193,
+        "hospital_id": 3,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7969,
+        "precision": 0.6957,
+        "recall": 0.6504,
+        "f1": 0.6723,
+        "auc": 0.8676,
+        "loss": 0.4139,
+        "confusion_matrix": [
+          [
+            226,
+            35
+          ],
+          [
+            43,
+            80
+          ]
+        ],
+        "train_loss": 0.412061,
+        "hospital_id": 4,
+        "n_train": 1536,
+        "dp_enabled": true
+      },
+      {
+        "accuracy": 0.7812,
+        "precision": 0.6449,
+        "recall": 0.6,
+        "f1": 0.6216,
+        "auc": 0.836,
+        "loss": 0.436268,
+        "confusion_matrix": [
+          [
+            231,
+            38
+          ],
+          [
+            46,
+            69
+          ]
+        ],
+        "train_loss": 0.436258,
+        "hospital_id": 5,
+        "n_train": 1536,
+        "dp_enabled": true
+      }
+    ],
+    "duration_sec": 14.95
+  }
+]

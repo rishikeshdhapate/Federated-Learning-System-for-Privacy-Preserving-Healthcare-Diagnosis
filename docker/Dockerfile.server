@@ -1,0 +1,43 @@
+# docker/Dockerfile.server
+# ─────────────────────────────────────────────────────────────────────────────
+# Builds the container that runs:
+#   1. Data pre-processing   (python data/preprocess.py)
+#   2. Flask API backend     (python api/app.py)
+#   3. Federated server      (imported by the API)
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM python:3.10-slim
+
+LABEL maintainer="FedHealth System"
+LABEL description="Federated Learning Server + Flask API for Privacy-Preserving Healthcare Diagnosis"
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl wget git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Python dependencies first (cached layer)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy all project source
+COPY . .
+
+# Create output and data directories
+RUN mkdir -p data/processed outputs
+
+# Pre-process data at build time
+# (downloads or generates dataset, splits into hospital files)
+RUN python data/preprocess.py
+
+# Expose the Flask API port
+EXPOSE 5000
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:5000/ || exit 1
+
+# Default command: launch the API server
+CMD ["python", "api/app.py"]

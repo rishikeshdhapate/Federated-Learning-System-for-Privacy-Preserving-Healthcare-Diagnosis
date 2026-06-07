@@ -1,0 +1,42 @@
+# docker/Dockerfile.dashboard
+# ─────────────────────────────────────────────────────────────────────────────
+# Serves the static HTML dashboard via nginx.
+# Nginx is used instead of Python http.server for production-grade serving.
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM nginx:1.25-alpine
+
+LABEL description="FedHealth Dashboard — static file server"
+
+# Copy dashboard files
+COPY dashboard/ /usr/share/nginx/html/
+
+# Nginx config: proxy /api/* to the Flask server and serve static files
+RUN cat > /etc/nginx/conf.d/default.conf << 'EOF'
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Serve static dashboard files
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache";
+    }
+
+    # Proxy API calls to Flask backend
+    location /api/ {
+        proxy_pass http://server:5000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_read_timeout 300s;
+    }
+}
+EOF
+
+EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
